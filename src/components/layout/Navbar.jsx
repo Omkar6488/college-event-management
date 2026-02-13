@@ -1,24 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Calendar, User, Moon, Sun, LogIn, UserCircle, Shield, Mail, Lock, UserPlus, CheckCircle } from 'lucide-react';
+import { Menu, X, Calendar, User, Moon, Sun, UserCircle, Shield, CheckCircle } from 'lucide-react';
 import { useDarkMode } from '../../context/DarkModeContext';
-import Modal from '../common/Modal';
-import Button from '../common/Button';
+import AuthModal from '../common/AuthModal';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [loginRole, setLoginRole] = useState('student');
-  const [isSignup, setIsSignup] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authRole, setAuthRole] = useState('student');
   const [scrolled, setScrolled] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    name: '',
-    confirmPassword: ''
-  });
   const location = useLocation();
   const navigate = useNavigate();
   const { isDarkMode, toggleDarkMode } = useDarkMode();
@@ -44,36 +36,8 @@ const Navbar = () => {
 
   const handleLoginClick = (role) => {
     setShowUserMenu(false);
-    setLoginRole(role);
-    setShowLoginModal(true);
-    setIsSignup(false);
-    setFormData({ email: '', password: '', name: '', confirmPassword: '' });
-  };
-
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Mock login/signup - in production, this would call an API
-    console.log(isSignup ? 'Signing up' : 'Logging in', formData, 'as', loginRole);
-    setShowLoginModal(false);
-    
-    // Navigate to appropriate dashboard
-    if (loginRole === 'student') {
-      navigate('/dashboard/student');
-    } else {
-      navigate('/dashboard/admin');
-    }
-  };
-
-  const toggleAuthMode = () => {
-    setIsSignup(!isSignup);
-    setFormData({ email: '', password: '', name: '', confirmPassword: '' });
+    setAuthRole(role);
+    setShowAuthModal(true);
   };
 
   const navLinks = [
@@ -101,7 +65,7 @@ const Navbar = () => {
             <div className="bg-gradient-to-r from-primary-600 to-accent-600 p-2 rounded-lg group-hover:scale-110 transition-transform">
               <Calendar className="text-white" size={24} />
             </div>
-            <span className="text-xl font-bold text-gradient dark:text-white">EventHub</span>
+            <span className="text-xl font-bold text-gradient dark:text-white">CampusCred</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -239,130 +203,6 @@ const Navbar = () => {
                 </Link>
               ))}
               <div className="pt-2 border-t border-gray-200 dark:border-gray-700">
-
-      {/* Login/Signup Modal */}
-      <Modal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        title={`${isSignup ? 'Sign Up' : 'Login'} as ${loginRole === 'student' ? 'Student' : 'Admin'}`}
-      >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {isSignup && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Full Name
-              </label>
-              <div className="relative">
-                <User size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required={isSignup}
-                  placeholder="Enter your full name"
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                />
-              </div>
-            </div>
-          )}
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Email Address
-            </label>
-            <div className="relative">
-              <Mail size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-                placeholder="Enter your email"
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-              Password
-            </label>
-            <div className="relative">
-              <Lock size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-                placeholder="Enter your password"
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-              />
-            </div>
-          </div>
-
-          {isSignup && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Confirm Password
-              </label>
-              <div className="relative">
-                <Lock size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <input
-                  type="password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleInputChange}
-                  required={isSignup}
-                  placeholder="Confirm your password"
-                  className="w-full pl-10 pr-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
-                />
-              </div>
-            </div>
-          )}
-
-          {!isSignup && (
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center text-gray-600 dark:text-gray-300">
-                <input type="checkbox" className="mr-2 rounded" />
-                Remember me
-              </label>
-              <a href="#" className="text-primary-600 dark:text-primary-400 hover:underline">
-                Forgot password?
-              </a>
-            </div>
-          )}
-
-          <Button type="submit" className="w-full" size="lg">
-            {isSignup ? (
-              <>
-                <UserPlus size={20} className="mr-2" />
-                Create Account
-              </>
-            ) : (
-              <>
-                <LogIn size={20} className="mr-2" />
-                Login
-              </>
-            )}
-          </Button>
-
-          <div className="text-center pt-4 border-t dark:border-gray-700">
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              {isSignup ? 'Already have an account?' : "Don't have an account?"}{' '}
-              <button
-                type="button"
-                onClick={toggleAuthMode}
-                className="text-primary-600 dark:text-primary-400 font-semibold hover:underline"
-              >
-                {isSignup ? 'Login' : 'Sign Up'}
-              </button>
-            </p>
-          </div>
-        </form>
-      </Modal>
                 <button 
                   onClick={() => {
                     handleLoginClick('student');
@@ -388,6 +228,13 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Authentication Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        initialRole={authRole}
+      />
     </nav>
   );
 };
