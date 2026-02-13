@@ -587,7 +587,7 @@ const FinalCTASection = ({ navigate }) => {
             Ready to Start Your Journey?
           </h2>
           <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Join 10,000+ students already using EventHub to discover amazing experiences
+            Join 10,000+ students already using CampusCred to discover amazing experiences
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4">
             <motion.button

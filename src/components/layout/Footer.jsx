@@ -37,7 +37,7 @@ const Footer = () => {
               <div className="bg-gradient-to-r from-primary-600 to-accent-600 p-2 rounded-lg">
                 <Calendar className="text-white" size={24} />
               </div>
-              <span className="text-xl font-bold text-white">EventHub</span>
+              <span className="text-xl font-bold text-white">CampusCred</span>
             </div>
             <p className="text-sm leading-relaxed text-gray-300 dark:text-gray-400">
               Your one-stop platform for managing and participating in all college events. 
@@ -115,7 +115,7 @@ const Footer = () => {
         <div className="mt-12 pt-8 border-t border-gray-800 dark:border-gray-700">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-center md:text-left">
-              © {currentYear} EventHub. All rights reserved. Built with ❤️ for students.
+              © {currentYear} CampusCred. All rights reserved. Built with ❤️ for students.
             </p>
             <div className="flex space-x-6 text-sm">
               <Link to="/terms" className="hover:text-primary-400 transition-colors">
